@@ -13,8 +13,12 @@
     />
   </head>
 
-  <body>
+  <body class="d-flex flex-column vh-100">
+    <%- include('../partials/navbar') %>
     <main class="container"><%- body %></main>
+    <%- include('../partials/footer') %>
+
+    <!-- scripts for bootstrap -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
