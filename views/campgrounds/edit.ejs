@@ -3,7 +3,12 @@
 <div class="row">
   <h1 class="text-center">Edit Camp</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds/<%= campground._id%>?_method=PUT" method="POST">
+    <form
+      action="/campgrounds/<%= campground._id%>?_method=PUT"
+      method="POST"
+      novalidate
+      class="validated-form"
+    >
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -11,8 +16,10 @@
           type="text"
           id="title"
           name="campground[title]"
+          required
           value="<%= campground.title %>"
         />
+        <div class="valid-feedback">Okay Looks Good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -21,8 +28,10 @@
           type="text"
           id="location"
           name="campground[location]"
+          required
           value="<%= campground.location%>"
         />
+        <div class="valid-feedback">Okay Looks Good</div>
       </div>
 
       <div class="mb-3">
@@ -38,8 +47,10 @@
             aria-describedby="price-label"
             id="price"
             name="campground[price]"
+            required
             value="<%= campground.price %> "
           />
+          <div class="valid-feedback">Okay Looks Good</div>
         </div>
       </div>
 
@@ -50,8 +61,10 @@
           type="text"
           id="image"
           name="campground[image]"
+          required
           value="<%= campground.image %> "
         />
+        <div class="valid-feedback">Okay Looks Good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="description">Camp Description</label>
@@ -60,9 +73,11 @@
           type="text"
           id="description"
           name="campground[description]"
+          required
         >
 <%=campground.description%></textarea
         >
+        <div class="valid-feedback">Okay Looks Good</div>
       </div>
       <div class="d-grid grap-2 mb-3">
         <button class="btn btn-dark">Update Camp</button>
@@ -70,3 +85,28 @@
     </form>
   </div>
 </div>
+
+<script>
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".validated-form");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (e) => {
+          if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>
