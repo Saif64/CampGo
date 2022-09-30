@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+  <div class="col-6 offset-3">
+    <div class="alert alert-success mt-5" role="alert">
+      <h4 class="alert-heading"><%= err.message %></h4>
+      <p><%= err.stack %></p>
+      <hr />
+    </div>
+    <div class="alert alert-dark" role="alert">
+      Please GO back to the other page
+      <a href="/campgrounds" class="alert-link">All Camps</a>. We are working on
+      it
+    </div>
+  </div>
+</div>

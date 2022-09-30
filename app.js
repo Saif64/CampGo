@@ -2,10 +2,13 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const Joi = require("joi");
 const CampGround = require("./models/camgGround");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const catchAsync = require("./middleware/catchAsync");
+const { campgroundSchema } = require("./schemas.js");
+const ExpressError = require("./middleware/ExpressError");
 
 main().catch((err) => console.log(err));
 /**
@@ -34,6 +37,17 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+const validateCamp = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  // console.log(result);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
 app.get("/", (req, res) => {
   res.render("home");
 });
@@ -46,12 +60,15 @@ app.get(
   })
 );
 
+/* This is a route that is rendering the new.ejs file in the campgrounds folder. */
 app.get("/campgrounds/new", (req, res) => {
   res.render("campgrounds/new");
 });
 
+/* Validating the data that is being sent to the server. */
 app.post(
   "/campgrounds",
+  validateCamp,
   catchAsync(async (req, res, next) => {
     const campground = new CampGround(req.body.campground);
     await campground.save();
@@ -77,6 +94,7 @@ app.get(
 
 app.put(
   "/campgrounds/:id",
+  validateCamp,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await CampGround.findByIdAndUpdate(id, {
@@ -95,7 +113,16 @@ app.delete(
   })
 );
 
+/* This is a catch all route that will catch any route that is not defined. */
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Page not found", 404));
+});
+
+//error handler
 app.use((err, req, res, next) => {
+  const { statusCode = 500, message = "something went wrong" } = err;
+  if (!err.message) err.message = "Something Went horribly wrong";
+  res.status(statusCode).render("error", { err });
   res.send("Something went wrong");
 });
 
