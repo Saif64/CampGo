@@ -1,43 +1,58 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="row">
-  <div class="col-6 offset-3">
+<div class="row mt-3">
+  <div class="col-6">
+
+    <!-- Card Show section -->
     <div class="card mb-3">
-      <img
-        src="<%= campground.image %> "
-        class="card-img-top"
-        alt="Responsive image"
-      />
+      <img src="<%= campground.image %> " class="card-img-top" alt="Responsive image" />
       <div class="card-body">
         <h1 class="card-title h1"><%= campground.title %></h1>
         <p class="card-text"><small><%= campground.description %></small></p>
       </div>
       <ul class="list-group list-group-flush">
-        <em
-          ><li class="list-group-item text-muted">
-            <%= campground.location %>
-          </li></em
-        >
-        <strong
-          ><li class="list-group-item">BDT <%= campground.price %></li></strong
-        >
+        <em>
+          <li class="list-group-item text-muted"><%= campground.location %></li>
+        </em>
+        <strong>
+          <li class="list-group-item">BDT <%= campground.price %></li>
+        </strong>
       </ul>
       <div class="card-body">
-        <a
-          href="/campgrounds/<%=campground._id%>/edit"
-          class="btn btn-info"
-          tabindex="-1"
-          role="button"
-          >Edit</a
-        >
-        <form
-          class="d-inline"
-          action="/campgrounds/<%= campground._id %>?_method=DELETE"
-          method="POST"
-        >
+        <a href="/campgrounds/<%=campground._id%>/edit" class="btn btn-info" tabindex="-1" role="button">Edit</a>
+        <form class="d-inline" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
           <button class="btn btn-danger">DELETE</button>
         </form>
       </div>
     </div>
+
   </div>
+
+  <div class="col-6">
+    <!-- Review Section -->
+    <h2><strong>Leave a rating</strong></h2>
+    <form action="/campgrounds/<%= campground._id %>/reviews" method="post" class="mb-3 validated-form" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for=""> Rating </label>
+        <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review </label>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+        <div class="valid-feedback">Good to go</div>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+
+    <!-- Each Comment shows here -->
+    <% for(let review of campground.reviews){ %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h4 class="card-title h4"><strong> Rating: <%= review.rating %> </strong></h4>
+        <p class="card-text">Review: <%= review.body %></p>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
 </div>

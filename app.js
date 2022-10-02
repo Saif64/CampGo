@@ -7,8 +7,10 @@ const CampGround = require("./models/camgGround");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const catchAsync = require("./middleware/catchAsync");
-const { campgroundSchema } = require("./schemas.js");
+const { campgroundSchema, reviewSchema } = require("./schemas.js");
 const ExpressError = require("./middleware/ExpressError");
+const Review = require("./models/review");
+const { log } = require("console");
 
 main().catch((err) => console.log(err));
 /**
@@ -34,12 +36,26 @@ const PORT = 3000;
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 app.use(methodOverride("_method"));
 
 const validateCamp = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
   // console.log(result);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);
@@ -56,7 +72,9 @@ app.get(
   "/campgrounds",
   catchAsync(async (req, res) => {
     const campgrounds = await CampGround.find({});
-    res.render("campgrounds/index", { campgrounds });
+    res.render("campgrounds/index", {
+      campgrounds,
+    });
   })
 );
 
@@ -79,8 +97,12 @@ app.post(
 app.get(
   "/campgrounds/:id",
   catchAsync(async (req, res) => {
-    const campground = await CampGround.findById(req.params.id);
-    res.render("campgrounds/show", { campground });
+    const campground = await CampGround.findById(req.params.id).populate(
+      "reviews"
+    );
+    res.render("campgrounds/show", {
+      campground,
+    });
   })
 );
 
@@ -88,7 +110,9 @@ app.get(
   "/campgrounds/:id/edit",
   catchAsync(async (req, res) => {
     const campground = await CampGround.findById(req.params.id);
-    res.render("campgrounds/edit", { campground });
+    res.render("campgrounds/edit", {
+      campground,
+    });
   })
 );
 
@@ -113,16 +137,32 @@ app.delete(
   })
 );
 
+/* Creating a new review and pushing it to the campground.reviews array. */
+app.post(
+  "/campgrounds/:id/reviews",
+  validateReview,
+  catchAsync(async (req, res) => {
+    const campground = await CampGround.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
+
 /* This is a catch all route that will catch any route that is not defined. */
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
 });
 
-//error handler
+// error handler
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "something went wrong" } = err;
   if (!err.message) err.message = "Something Went horribly wrong";
-  res.status(statusCode).render("error", { err });
+  res.status(statusCode).render("error", {
+    err,
+  });
   res.send("Something went wrong");
 });
 
