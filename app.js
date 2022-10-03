@@ -151,6 +151,17 @@ app.post(
   })
 );
 
+/* This is deleting the review from the campground and the review from the database. */
+app.delete(
+  "/campgrounds/:id/reviews/:reviewId",
+  catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await CampGround.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+  })
+);
+
 /* This is a catch all route that will catch any route that is not defined. */
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
