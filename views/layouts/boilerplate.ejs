@@ -12,7 +12,10 @@
 
 <body class="d-flex flex-column vh-100">
   <%- include('../partials/navbar') %>
-  <main class="container"><%- body %></main>
+  <main class="container mt-5">
+    <%- include('../partials/flash') %>
+    <%- body %>
+  </main>
   <%- include('../partials/footer') %>
 
   <!-- scripts for bootstrap -->
@@ -23,30 +26,7 @@
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
 
-  <script>
-    (() => {
-      "use strict";
-
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll(".validated-form");
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach((form) => {
-        form.addEventListener(
-          "submit",
-          (e) => {
-            if (!form.checkValidity()) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-
-            form.classList.add("was-validated");
-          },
-          false
-        );
-      });
-    })();
-  </script>
+  <script src="/javascripts/validateFoms.js"></script>
 </body>
 
 </html>

@@ -2,17 +2,16 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const Joi = require("joi");
-const CampGround = require("./models/camgGround");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const catchAsync = require("./middleware/catchAsync");
-const { campgroundSchema, reviewSchema } = require("./schemas.js");
+const session = require("express-session");
 const ExpressError = require("./middleware/ExpressError");
-const Review = require("./models/review");
-const { log } = require("console");
+const flash = require("connect-flash");
 
-main().catch((err) => console.log(err));
+const camps = require("./routes/campsRoutes");
+const reviews = require("./routes/reviewsRoutes");
+
+main().catch((err) => console.log("err"));
 /**
  * This function connects to the MongoDB database and returns a promise that resolves when the
  * connection is established.
@@ -36,131 +35,37 @@ const PORT = 3000;
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
 
-const validateCamp = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
-  // console.log(result);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
+const sessionConfig = {
+  secret: "thisissecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week in miliseconds
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
 };
+app.use(session(sessionConfig));
+app.use(flash());
 
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
+app.use("/campgrounds", camps);
+app.use("/campgrounds/:id/reviews", reviews);
 
 app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get(
-  "/campgrounds",
-  catchAsync(async (req, res) => {
-    const campgrounds = await CampGround.find({});
-    res.render("campgrounds/index", {
-      campgrounds,
-    });
-  })
-);
-
-/* This is a route that is rendering the new.ejs file in the campgrounds folder. */
-app.get("/campgrounds/new", (req, res) => {
-  res.render("campgrounds/new");
-});
-
-/* Validating the data that is being sent to the server. */
-app.post(
-  "/campgrounds",
-  validateCamp,
-  catchAsync(async (req, res, next) => {
-    const campground = new CampGround(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-app.get(
-  "/campgrounds/:id",
-  catchAsync(async (req, res) => {
-    const campground = await CampGround.findById(req.params.id).populate(
-      "reviews"
-    );
-    res.render("campgrounds/show", {
-      campground,
-    });
-  })
-);
-
-app.get(
-  "/campgrounds/:id/edit",
-  catchAsync(async (req, res) => {
-    const campground = await CampGround.findById(req.params.id);
-    res.render("campgrounds/edit", {
-      campground,
-    });
-  })
-);
-
-app.put(
-  "/campgrounds/:id",
-  validateCamp,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const campground = await CampGround.findByIdAndUpdate(id, {
-      ...req.body.campground,
-    });
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-app.delete(
-  "/campgrounds/:id",
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await CampGround.findByIdAndDelete(id);
-    res.redirect("/campgrounds");
-  })
-);
-
 /* Creating a new review and pushing it to the campground.reviews array. */
-app.post(
-  "/campgrounds/:id/reviews",
-  validateReview,
-  catchAsync(async (req, res) => {
-    const campground = await CampGround.findById(req.params.id);
-    const review = new Review(req.body.review);
-    campground.reviews.push(review);
-    await review.save();
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-/* This is deleting the review from the campground and the review from the database. */
-app.delete(
-  "/campgrounds/:id/reviews/:reviewId",
-  catchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    await CampGround.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/campgrounds/${id}`);
-  })
-);
 
 /* This is a catch all route that will catch any route that is not defined. */
 app.all("*", (req, res, next) => {
