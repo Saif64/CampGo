@@ -76,12 +76,12 @@ app.all("*", (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "something went wrong" } = err;
   if (!err.message) err.message = "Something Went horribly wrong";
-  res.status(statusCode).render("error", {
+  return res.status(statusCode).render("error", {  //TODO here return needs to be put to ignore [ERR_HTTP_HEADERS_SENT] error
     err,
   });
   res.send("Something went wrong");
 });
 
 app.listen(PORT, () => {
-  console.log(`connected to ${PORT}`);
+  console.log(`connected to ${ PORT }`);
 });
