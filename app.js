@@ -5,11 +5,15 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
-const ExpressError = require("./middleware/ExpressError");
+const ExpressError = require("./utils/ExpressError");
 const flash = require("connect-flash");
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
-const camps = require("./routes/campsRoutes");
-const reviews = require("./routes/reviewsRoutes");
+const campsRoutes = require("./routes/campsRoutes");
+const reviewsRoutes = require("./routes/reviewsRoutes");
+const userRoutes = require('./routes/userRoutes');
+const User = require('./models/user');
 
 main().catch((err) => console.log("err"));
 /**
@@ -40,9 +44,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const sessionConfig = {
-  secret: "thisissecret",
-  resave: false,
-  saveUninitialized: true,
+  secret: "thisissecret", resave: false, saveUninitialized: true,
   cookie: {
     httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week in miliseconds
@@ -52,14 +54,24 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
 
-app.use("/campgrounds", camps);
-app.use("/campgrounds/:id/reviews", reviews);
+
+app.use('/', userRoutes);
+app.use("/campgrounds", campsRoutes);
+app.use("/campgrounds/:id/reviews", reviewsRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");
