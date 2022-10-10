@@ -4,6 +4,7 @@ module.exports.renderRegister = (req, res) => {
     res.render('users/register');
 };
 
+/* The above code is registering a new user. */
 module.exports.registerUser = async (req, res) => {
     try {
         const { email, username, password } = req.body;
@@ -24,6 +25,7 @@ module.exports.renderLogin = (req, res) => {
     res.render('users/login');
 };
 
+/* This is the code that is logging in the user. */
 module.exports.loginUser = (req, res) => {
     const { username } = req.body;
     req.flash('success', `welcome Back ${ username }`);
@@ -32,6 +34,7 @@ module.exports.loginUser = (req, res) => {
     res.redirect(redirectUrl);
 };
 
+/* This is the code that is logging out the user. */
 module.exports.logoutUser = (req, res, next) => {
     req.logout((err) => {
         if (err) { return next(err); }
