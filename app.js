@@ -9,11 +9,12 @@ const ExpressError = require("./utils/ExpressError");
 const flash = require("connect-flash");
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 const campsRoutes = require("./routes/campsRoutes");
 const reviewsRoutes = require("./routes/reviewsRoutes");
 const userRoutes = require('./routes/userRoutes');
-const User = require('./models/user');
+
 
 main().catch((err) => console.log("err"));
 /**
@@ -88,7 +89,7 @@ app.all("*", (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "something went wrong" } = err;
   if (!err.message) err.message = "Something Went horribly wrong";
-  return res.status(statusCode).render("error", {  //TODO here return needs to be put to ignore [ERR_HTTP_HEADERS_SENT] error
+  return res.status(statusCode).render("error", {  // here return needs to be put to ignore [ERR_HTTP_HEADERS_SENT] error
     err,
   });
   res.send("Something went wrong");
