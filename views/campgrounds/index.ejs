@@ -7,7 +7,12 @@
 <% for(let campground of campgrounds){ %>
 <div class="card" mb-3>
   <div class="col-md-4">
+    <% if (campground.images.length) { %>
     <img class="img-fluid" alt="" src="<%= campground.images[0].url %> " />
+    <% } else {%>
+    <img class="img-fluid" alt=""
+      src="https://cdn3.vectorstock.com/i/1000x1000/42/02/map-point-logo-icon-design-vector-22904202.jpg" />
+    <%  } %>
   </div>
   <div class="col-md-8">
     <div class="card-boyd">

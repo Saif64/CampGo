@@ -54,6 +54,8 @@
 
   <!-- Review Section -->
   <div class="col-6">
+    <div id='map' style='width: 100%; height: 300px;'></div>
+
     <% if (currentUser) { %>
     <h2><strong>Leave a review</strong></h2>
     <form action="/campgrounds/<%= campground._id %>/reviews" method="post" class="validated-form mb-3" novalidate>
@@ -106,3 +108,9 @@
   </div>
 
 </div>
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  let campground = <%- JSON.stringify(campground) %> 
+</script>
+
+<script src="/scripts/showPageMap.js"></script>
