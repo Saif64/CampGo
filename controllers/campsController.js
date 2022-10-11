@@ -14,8 +14,10 @@ module.exports.newForm = (req, res) => {
 /* Validating the data that is being sent to the server. */
 module.exports.createCamp = async (req, res, next) => {
     const campground = new CampGround(req.body.campground);
+    campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     campground.author = req.user._id;
     await campground.save();
+    console.log(campground);
     req.flash("success", "successfully made a new camp");
     res.redirect(`/campgrounds/${ campground._id }`);
 };

@@ -1,5 +1,6 @@
 node_modules
 .vscode
+.env
 node_modules/.package-lock.json
 node_modules/.bin/ejs
 node_modules/.bin/ejs.cmd

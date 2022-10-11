@@ -6,7 +6,10 @@
 
     <!-- Card Show section -->
     <div class="card mb-3">
-      <img src="<%= campground.image %> " class="card-img-top" alt="Responsive image" />
+      <% for( let img of campground.images) { %>
+      <img src="<%= img.url %> " class="card-img-top" alt="Responsive image" />
+      <% } %>
+
       <div class="card-body">
         <h1 class="card-title h1"><%= campground.title %></h1>
         <h6><b>- <mark><%= campground.author.username %></mark></b></h6>

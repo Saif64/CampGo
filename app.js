@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 // all the imports
 const express = require("express");
 const path = require("path");
