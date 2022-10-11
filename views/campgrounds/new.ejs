@@ -16,7 +16,6 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="price">Price</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">BDT</span>
           <input type="text" class="form-control" placeholder="Put your price
@@ -25,7 +24,7 @@
           <div class="valid-feedback">Okay Looks Good</div>
         </div>
       </div>
-      <input type="file" name="image" placeholder="upload an image" multiple>
+      <!-- <input type="file" name="image" placeholder="upload an image" multiple> -->
       <!-- <div class="mb-3">
         <label class="form-label" for="image">image</label>
         <input class="form-control" type="text" id="image" name="campground[image]" required />
@@ -36,6 +35,16 @@
         <textarea class="form-control" type="text" id="description" name="campground[description]" required></textarea>
         <div class="valid-feedback">Okay Looks Good</div>
       </div>
+
+      <div class="mb-3">
+        <div class="form-file custom-file">
+          <input type="file" class="form-file-input" id="image" name="image" multiple>
+          <label class="form-file-label" for="image">
+            <span class="form-file-text custom-file-label">Choose image(s)...</span>
+          </label>
+        </div>
+      </div>
+
       <div class="d-grid grap-2 mb-3">
         <button class="btn btn-success">Add Camp</button>
       </div>

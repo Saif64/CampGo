@@ -3,34 +3,18 @@
 <div class="row">
   <h1 class="text-center">Edit Camp</h1>
   <div class="col-6 offset-3">
-    <form
-      action="/campgrounds/<%= campground._id%>?_method=PUT"
-      method="POST"
-      novalidate
-      class="validated-form"
-    >
+    <form action="/campgrounds/<%= campground._id%>?_method=PUT" method="POST" novalidate class="validated-form"
+      enctype="multipart/form-data">
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
-        <input
-          class="form-control"
-          type="text"
-          id="title"
-          name="campground[title]"
-          required
-          value="<%= campground.title %>"
-        />
+        <input class="form-control" type="text" id="title" name="campground[title]" required
+          value="<%= campground.title %>" />
         <div class="valid-feedback">Okay Looks Good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
-        <input
-          class="form-control"
-          type="text"
-          id="location"
-          name="campground[location]"
-          required
-          value="<%= campground.location%>"
-        />
+        <input class="form-control" type="text" id="location" name="campground[location]" required
+          value="<%= campground.location%>" />
         <div class="valid-feedback">Okay Looks Good</div>
       </div>
 
@@ -38,75 +22,44 @@
         <label class="form-label" for="price">Price</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">BDT</span>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Put your price
-          for the camp"
-            aria-label="price"
-            aria-describedby="price-label"
-            id="price"
-            name="campground[price]"
-            required
-            value="<%= campground.price %> "
-          />
+          <input type="text" class="form-control" placeholder="Put your price
+          for the camp" aria-label="price" aria-describedby="price-label" id="price" name="campground[price]" required
+            value="<%= campground.price %> " />
           <div class="valid-feedback">Okay Looks Good</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="image">image</label>
-        <input
-          class="form-control"
-          type="text"
-          id="image"
-          name="campground[image]"
-          required
-          value="<%= campground.image %> "
-        />
-        <div class="valid-feedback">Okay Looks Good</div>
-      </div>
-      <div class="mb-3">
         <label class="form-label" for="description">Camp Description</label>
-        <textarea
-          class="form-control"
-          type="text"
-          id="description"
-          name="campground[description]"
-          required
-        >
-<%=campground.description%></textarea
-        >
+        <textarea class="form-control" type="text" id="description" name="campground[description]" required>
+<%=campground.description%></textarea>
         <div class="valid-feedback">Okay Looks Good</div>
       </div>
+
+      <div class="mb-3">
+        <div class="form-file custom-file">
+          <input type="file" class="form-file-input" id="image" name="image" multiple>
+          <label class="form-file-label" for="image">
+            <span class="form-file-text custom-file-label">Add more images</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <% campground.images.forEach(function(img, i) {  %>
+        <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
+        <div class="form-check-inline">
+          <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+        </div>
+        <label for="image-<%=i%>">Delete?</label>
+        <% })%>
+      </div>
+
       <div class="d-grid grap-2 mb-3">
         <button class="btn btn-dark">Update Camp</button>
       </div>
+
+
     </form>
   </div>
 </div>
-
-<script>
-  (() => {
-    "use strict";
-
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll(".validated-form");
-
-    // Loop over them and prevent submission
-    Array.from(forms).forEach((form) => {
-      form.addEventListener(
-        "submit",
-        (e) => {
-          if (!form.checkValidity()) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-
-          form.classList.add("was-validated");
-        },
-        false
-      );
-    });
-  })();
-</script>
