@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const cities = require("./cities");
+const cities = require("./bd");
 const { places, descriptors } = require("./seedHelpers");
 const CampGround = require("../models/camgGround");
 
@@ -24,9 +24,9 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
   await CampGround.deleteMany({});
-  for (let i = 0; i < 200; i++) {
-    const random1000 = Math.floor(Math.random() * 1000);
-    const price = Math.floor(Math.random() * 20) + 10;
+  for (let i = 0; i < 250; i++) {
+    const random1000 = Math.floor(Math.random() * 15);
+    const price = Math.floor(Math.random() * 5000) + 10;
     const camp = new CampGround({
       author: '634253f52a6d7e22a6228b0e',
       location: `${ cities[random1000].city }, ${ cities[random1000].state }`,

@@ -1,12 +1,12 @@
 module.exports = [
   {
-    city: "New York",
+    city: "Dhaka",
     growth_from_2000_to_2013: "4.8%",
     latitude: 40.7127837,
     longitude: -74.0059413,
     population: "8405837",
     rank: "1",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Los Angeles",
@@ -654,7 +654,7 @@ module.exports = [
     longitude: -78.8783689,
     population: "258959",
     rank: "73",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Jersey City",
@@ -924,7 +924,7 @@ module.exports = [
     longitude: -77.6109219,
     population: "210358",
     rank: "103",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Des Moines",
@@ -1032,7 +1032,7 @@ module.exports = [
     longitude: -73.89874689999999,
     population: "199766",
     rank: "115",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Akron",
@@ -1590,7 +1590,7 @@ module.exports = [
     longitude: -76.14742439999999,
     population: "144669",
     rank: "177",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Mesquite",
@@ -2688,7 +2688,7 @@ module.exports = [
     longitude: -73.7562317,
     population: "98424",
     rank: "299",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Jurupa Valley",
@@ -3660,7 +3660,7 @@ module.exports = [
     longitude: -73.7823549,
     population: "79446",
     rank: "407",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Lake Forest",
@@ -4497,7 +4497,7 @@ module.exports = [
     longitude: -73.8370786,
     population: "68224",
     rank: "500",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Fort Myers",
@@ -4722,7 +4722,7 @@ module.exports = [
     longitude: -73.9395687,
     population: "65902",
     rank: "525",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Gaithersburg",
@@ -5100,7 +5100,7 @@ module.exports = [
     longitude: -75.232664,
     population: "61808",
     rank: "567",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Ames",
@@ -5622,7 +5622,7 @@ module.exports = [
     longitude: -73.7629097,
     population: "57866",
     rank: "625",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Arcadia",
@@ -5919,7 +5919,7 @@ module.exports = [
     longitude: -73.6187397,
     population: "55361",
     rank: "658",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Corvallis",
@@ -6336,7 +6336,7 @@ module.exports = [
     state: "California",
   },
   {
-    city: "West New York",
+    city: "West Dhaka",
     growth_from_2000_to_2013: "13.3%",
     latitude: 40.7878788,
     longitude: -74.0143064,
@@ -6702,7 +6702,7 @@ module.exports = [
     longitude: -73.69178509999999,
     population: "49974",
     rank: "745",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "West Sacramento",
@@ -6783,7 +6783,7 @@ module.exports = [
     longitude: -79.0377388,
     population: "49468",
     rank: "754",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Poway",
@@ -7197,7 +7197,7 @@ module.exports = [
     longitude: -75.91797380000001,
     population: "46444",
     rank: "800",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Coeur d'Alene",
@@ -7656,7 +7656,7 @@ module.exports = [
     longitude: -73.58318349999999,
     population: "43167",
     rank: "851",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Moline",
@@ -8790,7 +8790,7 @@ module.exports = [
     longitude: -73.70846449999999,
     population: "37659",
     rank: "977",
-    state: "New York",
+    state: "Dhaka",
   },
   {
     city: "Spartanburg",
