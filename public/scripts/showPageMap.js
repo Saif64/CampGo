@@ -11,6 +11,8 @@ map.on('style.load', () => {
     map.setFog({}); // Set the default atmosphere style
 });
 
+map.addControl(new mapboxgl.NavigationControl());
+
 new mapboxgl.Marker()
     .setLngLat(campground.geometry.coordinates)
     .setPopup(
