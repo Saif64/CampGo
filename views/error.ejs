@@ -3,8 +3,9 @@
   <div class="col-6 offset-3">
     <div class="alert alert-success mt-5" role="alert">
       <h4 class="alert-heading"><%= err.message %></h4>
-      <p><%= err.stack %></p>
-      <hr />
+      <% if (process.env.NODE_ENV !== "production") { %>
+        <p><%= err.stack %></p>
+        <% } %>
     </div>
     <div class="alert alert-dark" role="alert">
       Please GO back to the other page
