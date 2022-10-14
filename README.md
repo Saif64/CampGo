@@ -1,6 +1,8 @@
 # [CampGo](https://fierce-ridge-62253.herokuapp.com/)
 
 ### List of Features
+> FUll responsive using Bootstrap 5.2.1
+> 
 > Used EJS and nodeJS
 >
 > FUll anti SQL injection support
