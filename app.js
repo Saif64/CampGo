@@ -13,6 +13,7 @@ const flash = require("connect-flash");
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
+const MongoDBStore = require("connect-mongo")(session);
 
 const User = require('./models/user');
 
@@ -21,23 +22,25 @@ const reviewsRoutes = require("./routes/reviewsRoutes");
 const userRoutes = require('./routes/userRoutes');
 
 
-main().catch((err) => console.log("err"));
+main().catch((err) => console.log(err));
 /**
  * This function connects to the MongoDB database and returns a promise that resolves when the
  * connection is established.
  */
+ 
+
 async function main() {
-  await mongoose.connect("mongodb://localhost:27017/campGo");
+  const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/campGo";
+  await mongoose.connect(dbUrl);
 }
+
 const db = mongoose.connection;
 
-/* Checking if there is an error connecting to the database. If there is an error, it will log the
-error. If there is no error, it will log that it is connected to the database. */
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
   console.log("connected to database");
 });
-
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/campGo";
 const app = express();
 const PORT = 3000;
 
@@ -51,10 +54,23 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize({
   replaceWith: '_'
 }))
+
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+
+const store = new MongoDBStore({
+  url: dbUrl,
+  secret,
+  touchAfter: 24 * 60 * 60
+});
+
+store.on("error", function (e) {
+  console.log("SESSION STORE ERROR", e)
+})
   
 const sessionConfig = {
+  store,
   name: 'session',
-  secret: "thisissecret", resave: false, saveUninitialized: true,
+  secret: secret, resave: false, saveUninitialized: true,
   cookie: {
     httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week in miliseconds
