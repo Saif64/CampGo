@@ -42,7 +42,7 @@ db.once("open", () => {
 });
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/campGo";
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 /* This is setting the view engine to ejs and setting the views directory to the views folder. */
 app.engine("ejs", ejsMate);
