@@ -103,8 +103,6 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-/* Creating a new review and pushing it to the campground.reviews array. */
-
 /* This is a catch all route that will catch any route that is not defined. */
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
